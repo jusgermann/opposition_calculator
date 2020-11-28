@@ -35,7 +35,7 @@ JPL Horizons can be found at https://ssd.jpl.nasa.gov/horizons.cgi
 2. The Program will ask for the location, and date, and viewing information.
 3. It will ask for saving plots or not.
         
-**WARNING:** If running more then ~100 objects do not save the plots. Each
+**WARNING:** If running more then ~100 objects do **not** save the plots. Each
 plot is saved as a .png file, saving plots slows down the program
 it can also fill up drive space fast with thousands of objects.
 
