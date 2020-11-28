@@ -69,4 +69,4 @@ this properly.
 
 Developed By Justin G. - jusgermann@gmail.com
 	
-THis program is written in Python 3.8.
+This program is written in Python 3.8.
