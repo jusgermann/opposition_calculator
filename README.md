@@ -23,12 +23,10 @@ JPL Horizons can be found at https://ssd.jpl.nasa.gov/horizons.cgi
     EX: (The text file should be formatted as follows)
             
         12
-        178
+        578
         1
-        168
+        8268
         11290
-    
-    
     
     _The Text file must be saved in the same directory as the program._
                 
