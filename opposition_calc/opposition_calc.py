@@ -1,18 +1,16 @@
 # -*- coding: utf-8 -*-
 from astroquery.jplhorizons import Horizons
-from matplotlib import pyplot as plt
+from support_files.pre_task import date_checker, location_checker
+from support_files.post_task import find_oppositions, airmass_limit, plotter
 
-import matplotlib as mpl
-import numpy as np
 import pandas as pd
 
 import warnings
-import os
 
 
 
 """
-Module takes inputs of ID numbers from the user to produce opposition dates 
+Program takes inputs of ID numbers from the user to produce opposition dates 
 for objects in JPL Horizons.
 
 Input:
@@ -121,8 +119,8 @@ Input m or s: ''')
         else:
             print("{}Incorrect Character Input".format(print_break))
 
-
-    location = input('Location ID (Mauna Kea = 568): ')
+    # Uses location_checker module to make sure location is valid.
+    location = location_checker()
     
     # Feeds to functions to get dates in correct formats
     while True:
@@ -207,81 +205,6 @@ Are you sure you wish to save plots? y or n:
 
 
 
-def date_checker(start_end):
-    # Create list for acceptible month and day integers
-    month_nums = []
-    day_nums = []
-
-        
-    # Loop for getting input dates
-    while True:
-        
-        for i in range(1,13):
-            month_num = '%0.2d' % i 
-            month_nums.append(month_num)
-        
-        for i in range(1,32):
-            day_num = '%0.2d' % i
-            day_nums.append(day_num)
-        
-        # Creates input with correct grammer for start or end statements.
-        date = input('{} date yyyy-mm-dd: '.format(start_end))
-        
-        # If month with 30 days the 31 is deleted from day's list.
-        month_inp = date[5:7]
-        
-        if month_inp in ['04', '06', '09', '11']:
-            day_nums = day_nums[:-1]
-        
-        # Checks that year is valid
-        try: 
-            int(date[:4])
-        except:
-            print('Year Input is not formated correctly.')
-            
-        # Chekcs for leap years
-        in_year = int(date[:4])
-        if in_year % 4 == 0 and in_year % 100 != 0:
-            leap_year = True
-        elif in_year % 100 == 0:
-            leap_year = False
-        elif in_year % 400 == 0:
-            leap_year = True
-        else:
-            leap_year = False
-        
-        # If 2nd month assigns days depending on leap year.            
-        if month_inp == '02':
-            if leap_year == True:
-                day_nums = day_nums[:-2]
-            if leap_year == False:
-                day_nums = day_nums[:-3]
-        
-        # Checks for dashes
-        if date[4] and date[7] != '-':
-            print('Input yyyy-mm-dd with dashes in correct location.')
-        
-        # Checks if years are within JPL's range
-        if start_end == 'start':
-            int(date[:4]) < 1599
-            print('No Dates prior to 1599, {} is out of range'.format(date))
-
-        # Checks month integer is valid
-        if date[5:7] not in month_nums:
-            print("Month date input was out of range, must be 01-12")
-     
-        # Checks if day integer is valid
-        if date[8:] not in day_nums:
-            print("""Month {} has {} days, input day was out of range."""
-                  .format(month_inp, day_nums[-1]))
-        else: 
-            break
-        
-    return date
-
-            
-        
-
 def file_organizer(multi_single):
     
     # Creats DF with column names for populating.
@@ -295,7 +218,7 @@ def file_organizer(multi_single):
     if multi_single == 's':
         opposition_df, count, not_tar_count = sin_obj(opposition_df)
 
-    # Re-arrange columns as concat screws them up.
+    # Re-arrange columns since concat screws them up.
     cols = ['targetname', 
             'datetime_str', 
             'V', 
@@ -379,7 +302,7 @@ def obj_query(identifier,
     
     # Removes objects with airmass higher then limit
     if airmass_q == True:
-        eph = airmass_limit(eph_df)
+        eph = airmass_limit(eph_df, airmass_lim)
     
     # Check if Plots need to be saved before editing dataframe.
     if save_plot[0].lower() == 'y':
@@ -471,85 +394,6 @@ def sin_obj(opposition_df):
     not_tar_count = 0
 
     return min_eph_df, count, not_tar_count
-
-
-
-def find_oppositions(min_mag, obj_df):
-    """
-    Removes all rows with a magnitude lower than the specified magnitude from 
-    the dataframe. Finds the local minimums of the magnitude.
-    
-    RETURNS: A dataframe containing only dates that are oppositions below the
-    min_mag threshold
-    """
-    # Checks the mag against min_mag, creates a new DF with dates brighter
-    min_obj_df = obj_df[obj_df.V < min_mag]
-    
-    # adds local min specified minimum to a temporary dataframe
-    min_obj_df['local_min'] = min_obj_df.V[(min_obj_df.V.shift(1) >=
-                    min_obj_df.V) & (min_obj_df.V.shift(-1) >= min_obj_df.V)]
-
-    
-    try:
-        # Checks the last and the first line for local min
-        first_line = min_obj_df.iloc[0]
-        second_line = min_obj_df.iloc[1]
-        if first_line.V <= second_line.V:
-            min_obj_df.iloc[0, -1] = 'XX'
-            
-        last_line = min_obj_df.iloc[-1]
-        second_last_line = min_obj_df.iloc[-2]
-        if last_line.V <= second_last_line.V:
-            min_obj_df.iloc[-1, -1] = 'XX'
-    
-        # Removes all row's that are not local min's
-        min_obj_df['local_min'].replace('', np.nan, inplace=True)
-        min_obj_df.dropna(subset=['local_min'], inplace=True)
-        min_obj_df = min_obj_df.drop('local_min', 1)
-    except:
-        pass
-
-    return min_obj_df   
-
-
-
-def airmass_limit(eph):
-    """"Removes any rows that do not match airmass limit."""
-    
-    # Get Airmass location that are higher then the limit
-    high_airmass_index = eph[eph['airmass'] > airmass_lim].index
-    
-    eph.drop(high_airmass_index, inplace=True)
-    
-    return eph    
-    
-
-
-def plotter(obj_df, tar_name, min_mag):
-    """
-    Plots the magnitude overtime of each asteroid. Along with line at the 
-    magnitude limit.
-    """
-    
-    # Creates a directory to save output data, within cwd
-    save_path = os.path.join(os.getcwd(), 'plots')
-    if not os.path.exists(save_path):
-        os.mkdir(save_path)
-        
-    mpl.style.use('seaborn')
-    obj_df['min_mag'] = min_mag
-    
-    ax = obj_df.plot(x='datetime_str', 
-                     y=['V','min_mag'],
-                     rot=90,
-                     title='{}'.format(tar_name))
-    
-    ax.legend().remove()
-    ax.set_ylabel('Magnitude')
-        
-    plt.savefig(os.path.join(save_path, '{}.png'.format(tar_name)),
-                bbox_inches='tight')
-    plt.close()
 
 
 
