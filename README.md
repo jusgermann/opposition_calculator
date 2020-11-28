@@ -32,14 +32,14 @@ JPL Horizons can be found at https://ssd.jpl.nasa.gov/horizons.cgi
     
     _The Text file must be saved in the same directory as the program._
                 
-2. THe Program will ask for the location, and date, and viewing information.
-4. It will ask for saving plots or not.
+2. The Program will ask for the location, and date, and viewing information.
+3. It will ask for saving plots or not.
         
 **WARNING:** If running more then ~100 objects do not save the plots. Each
 plot is saved as a .png file, saving plots slows down the program
 it can also fill up drive space fast with thousands of objects.
 
-5. It will ask either for the ID number or the text file. 
+4. It will ask either for the ID number or the text file. 
 
 _NOTE:_ The text file must be saved in the same directory as the program.
 
