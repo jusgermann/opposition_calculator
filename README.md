@@ -69,6 +69,6 @@ this properly.
 
 
 
-Developed By Justin Germann - jusgermann@gmail.com
+Developed By Justin G. - jusgermann@gmail.com
 	
 THis program is written in Python 3.8.
