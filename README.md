@@ -4,9 +4,9 @@ Opposition calculator will take an object ID number, and determine at what
 dates, within a date range, that object is at it's brightest apparrent 
 magnitude.
 
-This program utilizes the jplhorizons module from astroquery
+This program utilizes the jplhorizons module from astroquery.
 
-The backend ephemeris gatherin is completed using the jplhorizons module.
+The back end ephemeris gathering is completed using the jplhorizons module.
 This program compiles the date range, and table settings before the query,
 then sorts the returned ephemeris for opposition dates. 
 
@@ -19,26 +19,29 @@ JPL Horizons can be found at https://ssd.jpl.nasa.gov/horizons.cgi
         JPL horizons to determine it's oppositions.
     2. **IF RUNNING MULTIPLE OBJECTS:** You will need a text file (.txt) that 
         contains all of the objects ID numbers in a single column.
-            EX: (The text file should be formatted as follows)
             
-                 12
-                 178
-                 1
-                 168
-                 11290
+    EX: (The text file should be formatted as follows)
+            
+        12
+        178
+        1
+        168
+        11290
     
     
     
     _The Text file must be saved in the same directory as the program._
                 
-2. THe Program will ask for the location, and date, and viewing informaiton.
+2. THe Program will ask for the location, and date, and viewing information.
 4. It will ask for saving plots or not.
         
-        **WARNING:** If running more then ~100 objects do not save the plots. Each
-            plot is saved as a png file, saving plots slows down the program
-            it can also fill up drive space fast with thousands of objects.
+**WARNING:** If running more then ~100 objects do not save the plots. Each
+plot is saved as a .png file, saving plots slows down the program
+it can also fill up drive space fast with thousands of objects.
+
 5. It will ask either for the ID number or the text file. 
-    _NOTE:_ The text file must be saved in the same directory as the program.
+
+_NOTE:_ The text file must be saved in the same directory as the program.
 
 
 ## Output Data
@@ -48,14 +51,14 @@ object.
 
 oppositions.csv:
 
-    * If oppositions are found a CSV title 'oppositions.csv' will be made. 
-    This is a table with all of the oppositions for each object. 
+* If oppositions are found a CSV title 'oppositions.csv' will be made. 
+This is a table with all of the oppositions for each object. 
 
 
 plots directory:
 
-    * If user elected to save the plots a folder titled "plots" will be made
-    and populated with the plot images for each object.
+* If user elected to save the plots a folder titled "plots" will be made
+and populated with the plot images for each object.
 
 
 
