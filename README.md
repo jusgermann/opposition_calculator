@@ -62,7 +62,7 @@ and populated with the plot images for each object.
 
 
 
-**THIS PROGRAM IS NOT COMPLETE.** It still a side project used for my own research. 
+**THIS PROGRAM IS NOT COMPLETE.** It is a side project used for my own research. 
 There are many bugs and it poorly handles crashes. I Hope to make this an 
 executable project at some time but I do not currently have the time to fix 
 this properly. 
