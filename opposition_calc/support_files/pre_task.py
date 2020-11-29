@@ -84,6 +84,7 @@ def location_checker():
     Returns the ID number that the user inputed"""
 
 
+
     # Opens text file of location ID's and saves to contents.
     with open('support_files/loc_ids.txt') as loc_ids:
         contents = loc_ids.read()

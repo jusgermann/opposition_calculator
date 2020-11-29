@@ -55,10 +55,6 @@ _________________________List of column output names__________________________
           'alpha_true':'True Phase Angle (deg)',
           'airmass' : 'airmass'
            }
-          
-    TODO:
-        - Add a list of locations and create a while loop to check for bad 
-        location inputs.
         
  =============================================================================
 Authored by Justin Germann (MS* Space Studies University of North Dakota)
@@ -68,6 +64,11 @@ Authored by Justin Germann (MS* Space Studies University of North Dakota)
 
 
 def main():
+    
+    """ 
+    Main module handles the inputs from the user and setting up the basic
+    variables.
+    """
     
     print('__________________________________________________________________')
     print('__________________________________________________________________')
@@ -103,8 +104,6 @@ def main():
     
     # For Formating
     print_break = "___________________________\n"
-    
-    # Defining Gobal vars through input 
     
     # Question for single or multiple objects
     while True:
@@ -142,7 +141,8 @@ Input m or s: ''')
             break
         else:
             print('{}Input step unit listed: {}'.format(print_break,step_list))
-     
+        
+        
     # Question to determine the desired magnitude limit.
     while True:
         min_mag = input('Magnitude Limit: ')
@@ -152,31 +152,40 @@ Input m or s: ''')
         except:
             print("{}Must be integer".format(print_break))
     
-    # Question to determine if limit by airmass is desired.
-    while True:
-        airmass_q = input("""Limit airmass's? y or n: """)
-        if airmass_q[0].lower() == 'y':
-            airmass_q = True       
-            airmass_lim = input("Input Airmass Limit: ")
-            
-            try:
-                airmass_lim = float(airmass_lim)
+    # make it so you can't limit airmass or daylight when step size > 1 day.
+    if step_size[-1] != 'd':
+        # Question to determine if limit by airmass is desired.
+        while True:
+            airmass_q = input("""Limit airmass's? y or n: """)
+            if airmass_q[0].lower() == 'y':
+                airmass_q = True       
+                airmass_lim = input("Input Airmass Limit: ")
+                
+                try:
+                    airmass_lim = float(airmass_lim)
+                    break
+                except:
+                    print("{}Must be integer".format(print_break))
+            else:
+                airmass_q = False
                 break
-            except:
-                print("{}Must be integer".format(print_break))
-        else:
-            airmass_q = False
-            break
-   # Question to see if you wish to skip daylight hours.
-    while True:
-        skip_day = input('Skip Daylight? y or n: ')
-        skip_day = skip_day[0].lower()                     
-        if  skip_day == 'y':
-            break
-        if  skip_day == 'n':
-            break
-        else:
-            print("{}Incorrect Character Input".format(print_break))
+       # Question to see if you wish to skip daylight hours.
+        while True:
+            skip_day = input('Skip Daylight? y or n: ')
+            skip_day = skip_day[0].lower()                     
+            if  skip_day == 'y':
+                break
+            if  skip_day == 'n':
+                break
+            else:
+                print("{}Incorrect Character Input".format(print_break))
+    
+    # Creates Variables for skipped days.
+    else:
+        skip_day = 'n'
+        airmass_q = 'n'
+        print('\n--- NOTICE ---')
+        print("Since Step >1 Day\nAirmass cutoff = N\nDaylight cutoff = N")
             
     # Question to check to see if plots wish to be saved.
     while True:
