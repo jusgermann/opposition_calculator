@@ -64,7 +64,6 @@ Authored by Justin Germann (MS* Space Studies University of North Dakota)
 
 
 def main():
-    
     """ 
     Main module handles the inputs from the user and setting up the basic
     variables.
@@ -287,16 +286,14 @@ def obj_query(identifier,
               min_mag,
               ):
     """ Responsible for pulling ephemeris information from JPL Horizons"""
-    
-    
-   
+
     # Calls object identified with date information from JPL horizons.    
     obj = Horizons(id=identifier, location=location,
                    epochs={'start':start_date,
                            'stop':stop_date,
                            'step':step_size},                     
                    )
-   
+
     # Checks if Daylight needs to be skipped
     if skip_day == 'y':
         # Creating Ephemeris without daylight hours
@@ -388,13 +385,25 @@ def sin_obj(opposition_df):
     print('-- Parsing Obj ID: {} --'.format(target))
 
     # Retrieving ephemeris from JPL_Hor and getting local min.
-    min_eph_df = obj_query(target, 
-                           location, 
-                           start_date, 
-                           stop_date, 
-                           step_size, 
-                           min_mag
-                           )
+    try:
+	    min_eph_df = obj_query(target, 
+	                           location, 
+	                           start_date, 
+	                           stop_date, 
+	                           step_size, 
+	                           min_mag
+	                           )
+    except:
+    	print(
+"""No ephemeris meets criteria. Check table cut-off values shown above for:
+ 
+	elevation angle
+  	airmass
+  	daylight only
+  	solar elongation
+  	local hour angle
+  	RA/DEC angular rate
+  				""")
     
     frames = [opposition_df, min_eph_df]
     opposition_df = pd.concat(frames)

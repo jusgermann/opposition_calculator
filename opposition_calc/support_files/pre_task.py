@@ -99,7 +99,7 @@ def location_checker():
             else:
                 print(
 """Location ({}) is NOT valid.
-See   https://ssd.jpl.nasa.gov/horizons.cgi#top   for list of locations.\n\n
+See   https://ssd.jpl.nasa.gov/horizons.cgi#top   for list of locations.
 """.format(loc_in))
                 continue
             
