@@ -4,11 +4,12 @@ Opposition calculator will take an object ID number, and determine at what
 dates, within a date range, that object is at it's brightest apparrent 
 magnitude.
 
-This program utilizes the jplhorizons module from astroquery.
+This program utilizes the atroquery.jplhorizons module. Documentation found 
+here https://astroquery.readthedocs.io/en/latest/jplhorizons/jplhorizons.html.
 
 The back end ephemeris gathering is completed using the jplhorizons module.
-This program compiles the date range, and table settings before the query,
-then sorts the returned ephemeris for opposition dates. 
+This program asks for the date range, and table settings before the query,
+then mulls through the returned ephemeris for opposition dates. 
 
 JPL Horizons can be found at https://ssd.jpl.nasa.gov/horizons.cgi
 
