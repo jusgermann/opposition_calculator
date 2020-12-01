@@ -10,8 +10,12 @@ import warnings
 
 
 """
-Program takes inputs of ID numbers from the user to produce opposition dates 
-for objects in JPL Horizons.
+Program takes ID number for targets in JPL horizons and determines at what dates
+those targets will be at opposiion (i.e. when they'll be at their brightest 
+apparent magnitude). 
+This aids in determining when those objects will be the eiseist to observe, it's 
+particularly handy for dim asteroids. 
+
 
 Input:
     Individual text inputs or a text document with a single column of object
@@ -28,8 +32,17 @@ Output:
     If save plot it (y) then a folder titled 'plots' will be created in the 
     current working directory and .png images of magnitude v date will be 
     saved for each object parsed. 
-        NOTE: Saving plots will add time and will take up much more storage, 
+        WARNING: Saving plots will add time and will take up much more storage, 
         it is not recommended to save plots with thousands of asteroids.
+
+NOTE: A few files are required to be included with this program for it to 
+function properly. A directory titled "support_files" containing pre_tasks.py
+and post_task.py is required. These are python modules taken out of the main 
+code to keep the program 'neater'. 
+
+    A list of observatory codes must also be included. This is a text document
+titled 'loc_ids.tx'. This must be included unless the location input cannot 
+be checked for approval. 
 
 _____________________________________________________________________________
 # List of Ephemeris columns to use in final ==================================
@@ -44,7 +57,7 @@ _____________________________________________________________________________
         'DEC',
         'airmass'
         ])
-_________________________List of column output names__________________________    
+_______________________Dictionary of column output names______________________
          {     
           'targetname':'Target Name',
           'datetime_str':'Date-Time (Date__(UT)HR:MN)',
@@ -194,7 +207,7 @@ Input m or s: ''')
             if mul_q_fir =='m':
                 # Second question to confirm when saving multiple plots.
                 save_plot = input("""
-\n\nIf Parsing many objects the plot generation will take up storage resources
+\n\nIf Parsing 1OO's of objects the plot generation will take up storage resources
 \nand considerably slow the parsing process. \n
 Are you sure you wish to save plots? y or n: 
                       """ )
