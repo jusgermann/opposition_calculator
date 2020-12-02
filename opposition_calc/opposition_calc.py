@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from astroquery.jplhorizons import Horizons
-from support_files.pre_task import date_checker, location_checker
-from support_files.post_task import find_oppositions, airmass_limit, plotter
+from pre_task import date_checker, location_checker
+from post_task import find_oppositions, airmass_limit, plotter
 from pathlib import Path
 
 import pandas as pd
@@ -117,19 +117,24 @@ def main():
     
     # For Formating
     print_break = "___________________________\n"
+    print('Finding oppositions for Multiple objects (m) or a Single object (s)?')
     
     # Question for single or multiple objects
     while True:
-        multiple_q = input('''                          
-Finding oppositions for Multiple objects (m) or a Single object (s)? \n
-Input m or s: ''')
-        mul_q_fir = multiple_q[0].lower()                     
-        if  mul_q_fir == 'm':
-            break
-        if  mul_q_fir == 's':
-            break
-        else:
-            print("{}Incorrect Character Input".format(print_break))
+        multiple_q = input('Input m or s: ')
+        try:
+            mul_q_fir = multiple_q[0].lower() 
+
+            if  mul_q_fir == 'm':
+                break
+            if  mul_q_fir == 's':
+                break
+            else:
+                print("{}Incorrect Character Input".format(print_break))
+
+        except:
+            print('Nothing was inputted, try agian.')
+
 
     # Uses location_checker module to make sure location is valid.
     location = location_checker()
@@ -223,7 +228,7 @@ Are you sure you wish to save plots? y or n: """
         else:
             print("{}Incorrect Character Input".format(print_break))
     
-    file_organizer(multiple_q)
+    file_organizer(mul_q_fir)
 
 
 
@@ -239,6 +244,9 @@ def file_organizer(multi_single):
         
     if multi_single == 's':
         opposition_df, count, not_tar_count = sin_obj(opposition_df)
+
+    else:
+        print("multiple or single answer not defined.")
 
     # Re-arrange columns since concat screws them up.
     cols = ['targetname', 
@@ -271,8 +279,7 @@ def file_organizer(multi_single):
     opposition_df = opposition_df.rename(columns = col_dict)
     
     #Saving final Concatted dataframe to csv.
-    opposition_df.to_csv((os.path.join(os.pardir, 'opposition.csv')), 
-                        index=False)
+    opposition_df.to_csv('opposition.csv', index=False)
     
 
     print('''
@@ -350,13 +357,10 @@ Text file containing object ID's in column required.""")
         file_name = input("""
 Input text file name containing object ID's
 Include .txt file extension (ex: asteroid.txt): """)
+        
         try:
-            # Make sure the directory is good and open the file.
-            path = os.getcwd()
-            obj_file = os.path.abspath(os.path.join(path, os.pardir, file_name))
-
             # Open file
-            with open(obj_file, 'r') as target_list:
+            with open(file_name, 'r') as target_list:
                 targets = target_list.read().split('\n')
                 
             break
@@ -400,30 +404,29 @@ Include .txt file extension (ex: asteroid.txt): """)
     
 def sin_obj(opposition_df):
     
-    
-    target = input('Input Object Identifier: ')
-    print('-- Parsing Obj ID: {} --'.format(target))
+    while True:
+        target = input('Input Object Identifier: ')
+        print('-- Parsing Obj ID: {} --'.format(target))
 
-    # Retrieving ephemeris from JPL_Hor and getting local min.
-    try:
-	    min_eph_df = obj_query(target, 
-	                           location, 
-	                           start_date, 
-	                           stop_date, 
-	                           step_size, 
-	                           min_mag
-	                           )
-    except:
-    	print(
-"""No ephemeris meets criteria. Check table cut-off values shown above for:
- 
-	elevation angle
-  	airmass
-  	daylight only
-  	solar elongation
-  	local hour angle
-  	RA/DEC angular rate
-  				""")
+        # Retrieving ephemeris from JPL_Hor and getting local min.
+        try:
+            min_eph_df = obj_query(target, 
+                                location, 
+                                start_date, 
+                                stop_date, 
+                                step_size, 
+                                min_mag
+                                )
+            break
+
+        except:
+            answer = input("Not a valid target. Try again? ")
+            if answer[0].lower() == 'y':
+                continue
+            if answer[0].lower() == 'n':
+                break
+            else:
+                continue
     
     frames = [opposition_df, min_eph_df]
     opposition_df = pd.concat(frames)
