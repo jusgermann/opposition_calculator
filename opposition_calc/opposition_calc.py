@@ -91,7 +91,7 @@ def main():
     warnings.simplefilter(action='ignore', category=FutureWarning)
     
     # Makes inputs global so other functions can access.
-    global target_list                                      # check if this is required.
+    global target_list                             # check if this is required.
     global location
     global start_date
     global stop_date
@@ -208,8 +208,8 @@ Input m or s: ''')
             if mul_q_fir =='m':
                 # Second question to confirm when saving multiple plots.
                 save_plot = input("""
-\n\nIf Parsing 1OO's of objects the plot generation will take up storage resources
-and considerably slow the parsing process.
+\n\nIf Parsing 1OO's of objects the plot generation will take up storage
+resources and considerably slow the parsing process.
 Are you sure you wish to save plots? y or n: """ 
 )
                 save_plot_fir = save_plot[0].lower()
