@@ -2,10 +2,12 @@
 from astroquery.jplhorizons import Horizons
 from support_files.pre_task import date_checker, location_checker
 from support_files.post_task import find_oppositions, airmass_limit, plotter
+from pathlib import Path
 
 import pandas as pd
 
 import warnings
+import os
 
 
 
@@ -39,7 +41,6 @@ NOTE: A few files are required to be included with this program for it to
 function properly. A directory titled "support_files" containing pre_tasks.py
 and post_task.py is required. These are python modules taken out of the main 
 code to keep the program 'neater'. 
-
     A list of observatory codes must also be included. This is a text document
 titled 'loc_ids.tx'. This must be included unless the location input cannot 
 be checked for approval. 
@@ -90,7 +91,7 @@ def main():
     warnings.simplefilter(action='ignore', category=FutureWarning)
     
     # Makes inputs global so other functions can access.
-    global target_list
+    global target_list                                      # check if this is required.
     global location
     global start_date
     global stop_date
@@ -208,14 +209,14 @@ Input m or s: ''')
                 # Second question to confirm when saving multiple plots.
                 save_plot = input("""
 \n\nIf Parsing 1OO's of objects the plot generation will take up storage resources
-\nand considerably slow the parsing process. \n
-Are you sure you wish to save plots? y or n: 
-                      """ )
+and considerably slow the parsing process.
+Are you sure you wish to save plots? y or n: """ 
+)
                 save_plot_fir = save_plot[0].lower()
                 if save_plot_fir == 'y':
                     break
                 else:
-                    print("{}Incorrect Character Input".format(print_break))
+                    print("Not saving plots")
             break
         if  save_plot_fir == 'n':
             break
@@ -270,7 +271,8 @@ def file_organizer(multi_single):
     opposition_df = opposition_df.rename(columns = col_dict)
     
     #Saving final Concatted dataframe to csv.
-    opposition_df.to_csv('oppositions.csv',index=False)
+    opposition_df.to_csv((os.path.join(os.pardir, 'opposition.csv')), 
+                        index=False)
     
 
     print('''
@@ -283,9 +285,9 @@ def file_organizer(multi_single):
 
     if total_opp != 0:
         print('''
-Oppositions dates have been saved too oppositions.csv\n
-within the directory for this program.
-                  ''')
+Oppositions dates have been saved too oppositions.csv within the directory 
+for this program.'''
+)
     else:
         print('No oppositions found with specified parameters.')
     
@@ -349,7 +351,12 @@ Text file containing object ID's in column required.""")
 Input text file name containing object ID's
 Include .txt file extension (ex: asteroid.txt): """)
         try:
-            with open(file_name, 'r') as target_list:
+            # Make sure the directory is good and open the file.
+            path = os.getcwd()
+            obj_file = os.path.abspath(os.path.join(path, os.pardir, file_name))
+
+            # Open file
+            with open(obj_file, 'r') as target_list:
                 targets = target_list.read().split('\n')
                 
             break

@@ -83,10 +83,8 @@ def location_checker():
     A text file titled loc_ids.txt MUST be included in support_files directory.
     Returns the ID number that the user inputed"""
 
-
-
     # Opens text file of location ID's and saves to contents.
-    with open('support_files/loc_ids.txt') as loc_ids:
+    with open('loc_ids.txt') as loc_ids:
         contents = loc_ids.read()
         while True:
             # Asking for the location ID.
@@ -104,7 +102,4 @@ See   https://ssd.jpl.nasa.gov/horizons.cgi#top   for list of locations.
                 continue
             
     return loc_in      
-        
-                  
-
     

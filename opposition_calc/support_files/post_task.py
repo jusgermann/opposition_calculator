@@ -70,7 +70,7 @@ def plotter(obj_df, tar_name, min_mag):
     """
     
     # Creates a directory to save output data, within cwd
-    save_path = os.path.join(os.getcwd(), 'plots')
+    save_path = os.path.join(os.pardir, 'plots')
     if not os.path.exists(save_path):
         os.mkdir(save_path)
         
