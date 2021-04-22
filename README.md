@@ -1,10 +1,10 @@
 ## Purpose
 
-Opposition calculator will take an object ID number, and determine at what
-dates, within a date range, that object is at it's brightest apparrent 
+Opposition calculator will take an objects ID number, and determine at what
+dates, within a specified date range, that object is at it's brightest apparrent 
 magnitude.
 
-This program utilizes the atroquery.jplhorizons module. Documentation found 
+This program utilizes the astroquery.jplhorizons module. Documentation found 
 here https://astroquery.readthedocs.io/en/latest/jplhorizons/jplhorizons.html.
 
 The back end ephemeris gathering is completed using the jplhorizons module.
@@ -36,7 +36,7 @@ JPL Horizons can be found at https://ssd.jpl.nasa.gov/horizons.cgi
         
 **WARNING:** If running more then ~100 objects do **not** save the plots. Each
 plot is saved as a .png file, saving plots slows down the program
-it can also fill up drive space fast with thousands of objects.
+it can also fill up the files drive space fast with thousands of objects.
 
 4. It will ask either for the ID number or the text file. 
 
